@@ -1,8 +1,9 @@
 package main
 
 import (
+	"log"
+
 	"github.com/purwandi/shift"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -25,6 +26,6 @@ func main() {
 
 	rootCmd.AddCommand(migrateCmd)
 	if err := rootCmd.Execute(); err != nil {
-		logrus.Fatal(err)
+		log.Fatal(err)
 	}
 }

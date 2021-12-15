@@ -7,7 +7,6 @@ import (
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/purwandi/shift/utils"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -19,12 +18,12 @@ var downCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		migrater, err := connection()
 		if err != nil {
-			logrus.Fatal(err)
+			log.Fatal(err)
 		}
 
 		limit, needsConfirm, err := utils.NumDownMigrationsFromArgs(all, args)
 		if err != nil {
-			logrus.Fatal(err)
+			log.Fatal(err)
 		}
 		if needsConfirm {
 			fmt.Println("Are you sure you want to apply all down migrations? [y/N]")
@@ -42,14 +41,14 @@ var downCommand = &cobra.Command{
 		if limit >= 0 {
 			if err := migrater.Steps(-limit); err != nil {
 				if err != migrate.ErrNoChange {
-					logrus.Fatal(err)
+					log.Fatal(err)
 				}
 				log.Println(err)
 			}
 		} else {
 			if err := migrater.Down(); err != nil {
 				if err != migrate.ErrNoChange {
-					logrus.Fatal(err)
+					log.Fatal(err)
 				}
 				log.Println(err)
 			}

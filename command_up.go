@@ -1,10 +1,10 @@
 package shift
 
 import (
+	"log"
 	"strconv"
 
 	"github.com/golang-migrate/migrate/v4"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -14,14 +14,14 @@ var upCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		migrater, err := connection()
 		if err != nil {
-			logrus.Fatal(err)
+			log.Fatal(err)
 		}
 
 		limit := -1
 		if len(args) > 0 {
 			n, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
-				logrus.Fatal("error: can't read limit argument N")
+				log.Fatal("error: can't read limit argument N")
 			}
 			limit = int(n)
 		}
@@ -29,22 +29,22 @@ var upCommand = &cobra.Command{
 		if limit >= 0 {
 			if err := migrater.Steps(limit); err != nil {
 				if err != migrate.ErrNoChange {
-					logrus.Fatal(err)
+					log.Fatal(err)
 				}
-				logrus.Println(err)
+				log.Println(err)
 			}
 		} else {
 			if err := migrater.Up(); err != nil {
 				if err != migrate.ErrNoChange {
-					logrus.Fatal(err)
+					log.Fatal(err)
 				}
-				logrus.Println(err)
+				log.Println(err)
 			}
 		}
 
 		migrater.Close()
 
-		logrus.Println("database migration successfully")
+		log.Println("database migration successfully")
 
 	},
 }

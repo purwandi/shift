@@ -2,6 +2,7 @@ package shift
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -10,18 +11,16 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/database/sqlserver"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/purwandi/shift/secret"
-	"github.com/sirupsen/logrus"
-
 	"github.com/spf13/cobra"
 )
 
 var (
-	driver   string = "postgres"
+	driver   string
 	username string
 	password string
 	hostname string
 	dbname   string
-	port     int = 5432
+	port     int
 	options  string
 
 	dsn string
@@ -102,12 +101,12 @@ func connection() (*migrate.Migrate, error) {
 	if os.Getenv("CONJUR_APPLIANCE_URL") != "" {
 		user, err := secret.Get(username)
 		if err != nil {
-			logrus.Fatal(err)
+			log.Fatal(err)
 		}
 
 		passwd, err := secret.Get(password)
 		if err != nil {
-			logrus.Fatal(err)
+			log.Fatal(err)
 		}
 
 		config.Username = user

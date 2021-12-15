@@ -1,12 +1,12 @@
 package secret
 
 import (
+	"log"
 	"strconv"
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
 	"github.com/cyberark/conjur-api-go/conjurapi"
-	"github.com/sirupsen/logrus"
 )
 
 type ConjurClient struct {
@@ -37,7 +37,7 @@ func (c *ConjurClient) Get(key string) (secret string, err error) {
 		return err
 	}
 	notify := func(err error, t time.Duration) {
-		logrus.Println("[config]", err.Error(), t)
+		log.Println("[config]", err.Error(), t)
 	}
 
 	bcf := backoff.NewExponentialBackOff()
@@ -45,7 +45,7 @@ func (c *ConjurClient) Get(key string) (secret string, err error) {
 
 	cerr := backoff.RetryNotify(connect, bcf, notify)
 	if cerr != nil {
-		logrus.Fatal("[config] giving up connecting to retrieve secret config ")
+		log.Fatal("[config] giving up connecting to retrieve secret config ")
 	}
 
 	res, err := strconv.Unquote("\"" + string(secretValue) + "\"")

@@ -3,13 +3,13 @@ package shift
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -31,16 +31,16 @@ var createCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
 		if name == "" {
-			logrus.Fatal("please spesify database migration name")
+			log.Fatal("please spesify database migration name")
 		}
 
 		timezone, err := time.LoadLocation(defaultTimezone)
 		if err != nil {
-			logrus.Fatal(err)
+			log.Fatal(err)
 		}
 
 		if err := createCmd(dir, time.Now().In(timezone), format, name, ext, seq, digit); err != nil {
-			logrus.Print(err)
+			log.Print(err)
 		}
 	},
 }

@@ -1,6 +1,6 @@
 package secret
 
-import "github.com/sirupsen/logrus"
+import "log"
 
 type Secret interface {
 	Get(key string) (secret string, err error)
@@ -15,12 +15,12 @@ func SetEngine(engine string) {
 	case "":
 		conn, err = NewConjurClient()
 		if err != nil {
-			logrus.Fatal(err)
+			log.Fatal(err)
 		}
 	default:
 		conn, err = NewConjurClient()
 		if err != nil {
-			logrus.Fatal(err)
+			log.Fatal(err)
 		}
 	}
 }
